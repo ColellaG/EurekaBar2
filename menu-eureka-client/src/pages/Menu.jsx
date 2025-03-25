@@ -15,21 +15,53 @@ function Menu() {
     const fetchMenuData = async () => {
       try {
         setLoading(true);
-        const [categoriesData, itemsData] = await Promise.all([
-          menuService.getCategories(),
-          menuService.getMenuItems()
-        ]);
+        console.log('Iniciando carga de datos...');
+        
+        const categoriesData = await menuService.getCategories();
+        console.log('Categorías cargadas (detalle):', 
+          categoriesData.map(cat => ({
+            id: cat.id,
+            name: cat.name,
+            type: typeof cat.id
+          }))
+        );
+        
+        const itemsData = await menuService.getMenuItems();
+        console.log('Ítems cargados (detalle):', 
+          itemsData.map(item => ({
+            id: item.id,
+            name: item.name,
+            category: item.category,
+            categoryType: typeof item.category
+          }))
+        );
 
         // Organizar los items por categoría
-        const categoriesWithItems = categoriesData.map(category => ({
-          ...category,
-          items: itemsData.filter(item => item.category === category.id)
-        }));
+        const categoriesWithItems = categoriesData.map(category => {
+          const categoryItems = itemsData.filter(item => {
+            console.log(`Comparando: item.category (${typeof item.category}) = ${item.category} con category.id (${typeof category.id}) = ${category.id}`);
+            return Number(item.category) === Number(category.id);
+          });
+          console.log(`Ítems para categoría ${category.name} (${category.id}):`, categoryItems);
+          return {
+            ...category,
+            items: categoryItems
+          };
+        });
 
+        console.log('Categorías con ítems:', categoriesWithItems);
         setCategories(categoriesWithItems);
+        
+        // Inicializar todas las categorías como abiertas
+        const initialOpenState = {};
+        categoriesWithItems.forEach(cat => {
+          initialOpenState[cat.id] = true;
+        });
+        setOpenCategories(initialOpenState);
+        
         setError(null);
       } catch (err) {
-        console.error('Error fetching menu data:', err);
+        console.error('Error detallado:', err);
         setError('Error al cargar el menú. Por favor, intente nuevamente.');
       } finally {
         setLoading(false);
@@ -130,7 +162,7 @@ function Menu() {
       </footer>
       <div className={styles.adminContainer}>
         <a 
-          href="http://localhost:8000/admin" 
+          href="http://localhost:8000/admin/" 
           target="_blank" 
           rel="noopener noreferrer" 
           className={styles.adminButton}
