@@ -25,5 +25,9 @@ COPY . .
 # Exponer el puerto
 EXPOSE 8000
 
+# Script de inicio
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
 # Comando para ejecutar la aplicación
-CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8000"] 
+CMD ["/start.sh"] 
