@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  api:
+    build: ./menu-eureka-api
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=False
+      - SECRET_KEY=django-insecure-8x#a9m2$p5v&k3n@7q4w9y6t1u2i3o4p5l6k7j8h9g0f1e2d3c4b5a6
+      - ALLOWED_HOSTS=.railway.app
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/menueureka
+    depends_on:
+      - db
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py createsuperuser --noinput --username admin --email admin@example.com &&
+             gunicorn core.wsgi:application --bind 0.0.0.0:8000"
+
+  admin:
+    build: ./menu-eureka-admin
+    ports:
+      - "5173:80"
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
+    depends_on:
+      - api
+
+  client:
+    build: ./menu-eureka-client
+    ports:
+      - "5174:80"
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
+    depends_on:
+      - api
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=menueureka
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data: 
