@@ -52,10 +52,10 @@ function Menu() {
         console.log('Categorías con ítems:', categoriesWithItems);
         setCategories(categoriesWithItems);
         
-        // Inicializar todas las categorías como abiertas
+        // Inicializar todas las categorías como cerradas
         const initialOpenState = {};
         categoriesWithItems.forEach(cat => {
-          initialOpenState[cat.id] = true;
+          initialOpenState[cat.id] = false;
         });
         setOpenCategories(initialOpenState);
         

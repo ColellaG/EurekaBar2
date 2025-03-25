@@ -1,87 +1,105 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../services/api';
-import { 
-  Container, 
-  Paper, 
-  TextField, 
-  Button, 
-  Typography, 
+import {
+  Container,
   Box,
-  Alert 
+  Typography,
+  TextField,
+  Button,
+  Paper,
+  Alert,
 } from '@mui/material';
+import { useAuth } from '../context/AuthContext';
 
-function Login() {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    username: '',
-    password: ''
-  });
+export default function Login() {
+  const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     try {
-      await authService.login(formData.username, formData.password);
-      navigate('/dashboard');
-    } catch (err) {
-      setError('Credenciales inválidas');
+      const success = await login(formData.username, formData.password);
+      if (success) {
+        navigate('/');
+      } else {
+        setError('Credenciales inválidas');
+      }
+    } catch (error) {
+      setError('Error al iniciar sesión');
     }
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 8 }}>
-        <Paper elevation={3} sx={{ p: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom align="center">
-            Panel de Administración
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Paper
+          elevation={3}
+          sx={{
+            padding: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            Iniciar Sesión
           </Typography>
           {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
               {error}
             </Alert>
           )}
-          <form onSubmit={handleSubmit}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
+              margin="normal"
+              required
               fullWidth
+              id="username"
               label="Usuario"
               name="username"
+              autoComplete="username"
+              autoFocus
               value={formData.username}
-              onChange={handleChange}
-              margin="normal"
-              required
+              onChange={(e) =>
+                setFormData({ ...formData, username: e.target.value })
+              }
             />
             <TextField
-              fullWidth
-              label="Contraseña"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
               margin="normal"
               required
+              fullWidth
+              name="password"
+              label="Contraseña"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
-              sx={{ mt: 3 }}
+              sx={{ mt: 3, mb: 2 }}
             >
               Iniciar Sesión
             </Button>
-          </form>
+          </Box>
         </Paper>
       </Box>
     </Container>
   );
-}
-
-export default Login; 
+} 
