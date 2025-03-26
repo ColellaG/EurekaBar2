@@ -1,5 +1,5 @@
 # Usar una imagen base de Python más ligera
-FROM python:3.11-alpine
+FROM python:3.11-slim-bullseye
 
 # Establecer variables de entorno
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -9,23 +9,20 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
 # Instalar dependencias del sistema
-RUN apk add --no-cache \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     postgresql-client \
-    netcat-openbsd \
+    netcat-traditional \
     gcc \
     python3-dev \
-    musl-dev \
-    postgresql-dev \
-    libffi-dev \
-    openssl-dev \
-    cargo \
-    tzdata
+    && rm -rf /var/lib/apt/lists/*
 
 # Copiar requirements.txt primero
 COPY requirements.txt .
 
-# Instalar dependencias de Python
-RUN pip install --no-cache-dir -r requirements.txt
+# Instalar dependencias de Python con retry
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copiar el resto del proyecto
 COPY . .
