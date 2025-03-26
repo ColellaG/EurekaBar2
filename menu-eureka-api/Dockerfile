@@ -17,19 +17,17 @@ RUN apk add --no-cache \
     musl-dev \
     postgresql-dev
 
-# Copiar requirements.txt
-COPY requirements.txt .
+# Copiar todo el proyecto primero
+COPY . .
 
 # Instalar dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar el proyecto y el script de inicio
-COPY . .
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+# Hacer el script ejecutable
+RUN chmod +x start.sh
 
 # Exponer el puerto
 EXPOSE 8000
 
 # Comando para ejecutar la aplicación
-CMD ["/start.sh"] 
+CMD ["./start.sh"] 
