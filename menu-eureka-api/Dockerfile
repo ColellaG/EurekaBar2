@@ -15,7 +15,10 @@ RUN apk add --no-cache \
     gcc \
     python3-dev \
     musl-dev \
-    postgresql-dev
+    postgresql-dev \
+    libffi-dev \
+    openssl-dev \
+    cargo
 
 # Copiar todo el proyecto primero
 COPY . .
