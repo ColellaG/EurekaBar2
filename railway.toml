@@ -1,7 +1,7 @@
 [build]
 builder = "DOCKERFILE"
-dockerfilePath = "menu-eureka-api/Dockerfile"
-buildPath = "menu-eureka-api"
+dockerfilePath = "./menu-eureka-api/Dockerfile"
+buildPath = "./menu-eureka-api"
 
 [deploy]
 healthcheckPath = "/"
