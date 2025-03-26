@@ -20,11 +20,14 @@ RUN apk add --no-cache \
     openssl-dev \
     cargo
 
-# Copiar todo el proyecto primero
-COPY . .
+# Copiar requirements.txt primero
+COPY requirements.txt .
 
 # Instalar dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar el resto del proyecto
+COPY . .
 
 # Hacer el script ejecutable
 RUN chmod +x start.sh
