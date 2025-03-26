@@ -1,5 +1,5 @@
-# Usar una imagen base de Python
-FROM python:3.11-slim
+# Usar una imagen base de Python más ligera
+FROM python:3.11-alpine
 
 # Establecer variables de entorno
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -9,10 +9,13 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
 # Instalar dependencias del sistema
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache \
     postgresql-client \
-    netcat-traditional \
-    && rm -rf /var/lib/apt/lists/*
+    netcat-openbsd \
+    gcc \
+    python3-dev \
+    musl-dev \
+    postgresql-dev
 
 # Copiar requirements.txt
 COPY requirements.txt .
