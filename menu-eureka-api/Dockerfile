@@ -18,7 +18,8 @@ RUN apk add --no-cache \
     postgresql-dev \
     libffi-dev \
     openssl-dev \
-    cargo
+    cargo \
+    tzdata
 
 # Copiar requirements.txt primero
 COPY requirements.txt .

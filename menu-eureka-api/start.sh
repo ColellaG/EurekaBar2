@@ -14,6 +14,9 @@ if [ -z "$PORT" ]; then
     exit 1
 fi
 
+# Configurar zona horaria
+export TZ=UTC
+
 # Esperar a que la base de datos esté lista
 echo "Esperando a que la base de datos esté lista..."
 max_retries=30
@@ -32,12 +35,29 @@ echo "Base de datos lista!"
 
 # Aplicar migraciones
 echo "Aplicando migraciones..."
-python manage.py migrate
+python manage.py migrate --noinput
 
 # Crear superusuario si no existe
 echo "Creando superusuario..."
-python manage.py createsuperuser --noinput --username admin --email admin@example.com
+DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME:-admin}
+DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL:-admin@example.com}
+DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD:-admin123}
+
+python manage.py createsuperuser --noinput \
+    --username $DJANGO_SUPERUSER_USERNAME \
+    --email $DJANGO_SUPERUSER_EMAIL
+
+# Recolectar archivos estáticos
+echo "Recolectando archivos estáticos..."
+python manage.py collectstatic --noinput
 
 # Iniciar Gunicorn
 echo "Iniciando Gunicorn..."
-exec gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 4 --threads 4 --timeout 120 
+exec gunicorn core.wsgi:application \
+    --bind 0.0.0.0:$PORT \
+    --workers 4 \
+    --threads 4 \
+    --timeout 120 \
+    --access-logfile - \
+    --error-logfile - \
+    --log-level info 
