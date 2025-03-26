@@ -20,15 +20,13 @@ COPY requirements.txt .
 # Instalar dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar el proyecto
+# Copiar el proyecto y el script de inicio
 COPY . .
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
 # Exponer el puerto
 EXPOSE 8000
-
-# Script de inicio
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
 
 # Comando para ejecutar la aplicación
 CMD ["/start.sh"] 
