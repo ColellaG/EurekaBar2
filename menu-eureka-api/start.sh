@@ -1,5 +1,17 @@
 #!/bin/sh
 
+# Verificar variables de entorno requeridas
+echo "Verificando variables de entorno..."
+if [ -z "$DATABASE_URL" ]; then
+    echo "Error: DATABASE_URL no está configurada"
+    exit 1
+fi
+
+if [ -z "$PORT" ]; then
+    echo "Error: PORT no está configurado"
+    exit 1
+fi
+
 # Esperar a que la base de datos esté lista
 echo "Esperando a que la base de datos esté lista..."
 while ! nc -z $DB_HOST $DB_PORT; do
