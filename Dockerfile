@@ -4,6 +4,13 @@ FROM python:3.11
 # Establecer el directorio de trabajo
 WORKDIR /app
 
+# Instalar dependencias del sistema
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    postgresql-client \
+    netcat-traditional \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copiar el proyecto
 COPY menu-eureka-api/ .
 
@@ -17,4 +24,4 @@ RUN chmod +x start.sh
 EXPOSE 8000
 
 # Comando para ejecutar la aplicación
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"] 
+CMD ["./start.sh"] 
