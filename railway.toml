@@ -8,6 +8,7 @@ healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 5
+startCommand = "./start.sh"
 
 [deploy.startCommand]
 command = "./start.sh" 
