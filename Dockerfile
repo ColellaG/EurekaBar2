@@ -17,15 +17,11 @@ RUN apt-get update && \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar requirements.txt primero
-COPY menu-eureka-api/requirements.txt .
-
-# Instalar dependencias de Python con retry
-RUN --mount=type=cache,id=pip,target=/root/.cache/pip \
-    pip install --no-cache-dir -r requirements.txt
-
 # Copiar el proyecto
 COPY menu-eureka-api/ .
+
+# Instalar dependencias de Python
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Hacer el script ejecutable
 RUN chmod +x start.sh
