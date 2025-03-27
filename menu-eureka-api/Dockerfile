@@ -21,7 +21,7 @@ RUN apt-get update && \
 COPY requirements.txt .
 
 # Instalar dependencias de Python con retry
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,id=pip,target=/root/.cache/pip \
     pip install --no-cache-dir -r requirements.txt
 
 # Copiar el resto del proyecto
