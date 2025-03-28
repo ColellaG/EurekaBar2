@@ -24,7 +24,7 @@ from rest_framework_simplejwt.views import (
 )
 from django.http import HttpResponse
 from rest_framework import routers
-from menu.views import CategoryViewSet, ProductViewSet
+from menu.views import CategoryViewSet, ProductViewSet, MenuItemViewSet
 
 def health_check(request):
     return HttpResponse("OK", status=200)
@@ -32,6 +32,7 @@ def health_check(request):
 router = routers.DefaultRouter()
 router.register(r'categories', CategoryViewSet)
 router.register(r'products', ProductViewSet)
+router.register(r'menu-items', MenuItemViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
