@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
-from .models import Category, MenuItem
-from .serializers import CategorySerializer, MenuItemSerializer
+from .models import Category, MenuItem, Product
+from .serializers import CategorySerializer, MenuItemSerializer, ProductSerializer
 
 # Create your views here.
 
@@ -13,15 +13,12 @@ class IsAdminOrReadOnly(permissions.BasePermission):
         return request.user and request.user.is_staff
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all().order_by('order')
+    queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [permissions.AllowAny]
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        print("Enviando categorías:", serializer.data)
-        return Response(serializer.data)
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
 class MenuItemViewSet(viewsets.ModelViewSet):
     queryset = MenuItem.objects.all().order_by('category__order', 'order')
