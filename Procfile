@@ -1,1 +1,1 @@
-web: cd menu-eureka-api && python manage.py migrate && python manage.py createsuperuser --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 4 --threads 4 --timeout 120 
+web: cd menu-eureka-api && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 4 --threads 4 --timeout 120 
