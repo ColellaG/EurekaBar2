@@ -23,13 +23,19 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from django.http import HttpResponse
+from rest_framework import routers
+from menu.views import CategoryViewSet, ProductViewSet
 
 def health_check(request):
     return HttpResponse("OK", status=200)
 
+router = routers.DefaultRouter()
+router.register(r'categories', CategoryViewSet)
+router.register(r'products', ProductViewSet)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('menu.urls')),
+    path('api/', include(router.urls)),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('', health_check, name='health_check'),
