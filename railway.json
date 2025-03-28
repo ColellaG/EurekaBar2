@@ -5,7 +5,7 @@
     "buildCommand": "pip install -r requirements.txt"
   },
   "deploy": {
-    "startCommand": "cd menu-eureka-api && chmod +x wait-for-it.sh && ./wait-for-it.sh $PGHOST 'python manage.py migrate && python manage.py createsuperuser --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 4 --threads 4 --timeout 180'",
+    "startCommand": "cd menu-eureka-api && python wait_for_db.py && python manage.py migrate && python manage.py createsuperuser --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 4 --threads 4 --timeout 180",
     "healthcheckPath": "/",
     "healthcheckTimeout": 900,
     "restartPolicyType": "on_failure",
