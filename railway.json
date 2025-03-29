@@ -7,9 +7,9 @@
   "deploy": {
     "startCommand": "cd menu-eureka-api && python wait_for_db.py && python manage.py migrate && python manage.py createsuperuser --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 4 --threads 4 --timeout 180",
     "healthcheckPath": "/",
-    "healthcheckTimeout": 900,
+    "healthcheckTimeout": 1200,
     "restartPolicyType": "on_failure",
-    "restartPolicyMaxRetries": 15,
-    "healthcheckInterval": 60
+    "restartPolicyMaxRetries": 20,
+    "healthcheckInterval": 30
   }
 } 
