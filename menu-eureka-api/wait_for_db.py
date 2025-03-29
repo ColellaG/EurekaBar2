@@ -6,16 +6,24 @@ from psycopg2.extras import DictCursor
 def wait_for_db():
     # Imprimir variables de entorno
     print("Environment variables:")
-    for key in ['DATABASE_URL', 'PGHOST', 'PGPORT', 'POSTGRES_DB', 'POSTGRES_USER']:
+    for key in ['DATABASE_URL', 'PGHOST', 'PGPORT', 'POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD']:
         value = os.environ.get(key)
-        if value and key != 'DATABASE_URL':
+        if value and key not in ['DATABASE_URL', 'POSTGRES_PASSWORD']:
             print(f"{key}: {value}")
+        elif key == 'POSTGRES_PASSWORD':
+            print(f"{key}: {'[SET]' if value else '[NOT SET]'}")
+
+    # Obtener la contraseña
+    password = os.environ.get('POSTGRES_PASSWORD')
+    if not password:
+        print("Error: POSTGRES_PASSWORD environment variable is not set")
+        return False
 
     # Usar valores fijos de Railway
     db_params = {
         'dbname': 'railway',
         'user': 'postgres',
-        'password': os.environ.get('POSTGRES_PASSWORD'),
+        'password': password,
         'host': 'turntable.proxy.rlwy.net',
         'port': 47455,
     }
