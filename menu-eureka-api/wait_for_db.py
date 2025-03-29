@@ -5,9 +5,22 @@ from psycopg2.extras import DictCursor
 import urllib.parse
 
 def wait_for_db():
+    # Imprimir todas las variables de entorno relacionadas con la base de datos
+    print("Environment variables:")
+    for key in ['DATABASE_URL', 'PGDATABASE', 'PGUSER', 'PGPASSWORD', 'PGHOST', 'PGPORT']:
+        value = os.environ.get(key)
+        if value:
+            if key == 'PGPASSWORD':
+                print(f"{key}: [HIDDEN]")
+            else:
+                print(f"{key}: {value}")
+        else:
+            print(f"{key}: Not set")
+
     # Intentar usar DATABASE_URL primero
     database_url = os.environ.get('DATABASE_URL')
     if database_url:
+        print(f"Using DATABASE_URL: {database_url}")
         # Parsear la URL de la base de datos
         url = urllib.parse.urlparse(database_url)
         db_params = {
@@ -18,6 +31,7 @@ def wait_for_db():
             'port': url.port or 5432,
         }
     else:
+        print("DATABASE_URL not found, using individual parameters")
         # Fallback a variables individuales
         db_params = {
             'dbname': os.environ.get('PGDATABASE', 'postgres'),
@@ -27,14 +41,14 @@ def wait_for_db():
             'port': os.environ.get('PGPORT', '5432'),
         }
 
-    print("Database connection parameters:")
+    print("\nDatabase connection parameters:")
     for key, value in db_params.items():
         if key != 'password':
             print(f"{key}: {value}")
 
     while True:
         try:
-            print(f"Attempting to connect to PostgreSQL at {db_params['host']}:{db_params['port']}")
+            print(f"\nAttempting to connect to PostgreSQL at {db_params['host']}:{db_params['port']}")
             conn = psycopg2.connect(**db_params)
             conn.close()
             print("PostgreSQL is up - executing command")
