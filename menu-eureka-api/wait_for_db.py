@@ -2,44 +2,22 @@ import os
 import time
 import psycopg2
 from psycopg2.extras import DictCursor
-import urllib.parse
 
 def wait_for_db():
-    # Imprimir todas las variables de entorno relacionadas con la base de datos
+    # Imprimir variables de entorno
     print("Environment variables:")
-    for key in ['DATABASE_URL', 'PGDATABASE', 'PGUSER', 'PGPASSWORD', 'PGHOST', 'PGPORT']:
+    for key in ['PGHOST', 'PGPORT', 'POSTGRES_DB', 'POSTGRES_USER']:
         value = os.environ.get(key)
-        if value:
-            if key == 'PGPASSWORD':
-                print(f"{key}: [HIDDEN]")
-            else:
-                print(f"{key}: {value}")
-        else:
-            print(f"{key}: Not set")
+        print(f"{key}: {value}")
 
-    # Intentar usar DATABASE_URL primero
-    database_url = os.environ.get('DATABASE_URL')
-    if database_url:
-        print(f"Using DATABASE_URL: {database_url}")
-        # Parsear la URL de la base de datos
-        url = urllib.parse.urlparse(database_url)
-        db_params = {
-            'dbname': url.path[1:],  # Eliminar el primer '/'
-            'user': url.username,
-            'password': url.password,
-            'host': url.hostname,
-            'port': url.port or 5432,
-        }
-    else:
-        print("DATABASE_URL not found, using individual parameters")
-        # Fallback a variables individuales
-        db_params = {
-            'dbname': os.environ.get('PGDATABASE', 'postgres'),
-            'user': os.environ.get('PGUSER', 'postgres'),
-            'password': os.environ.get('PGPASSWORD', 'postgres'),
-            'host': os.environ.get('PGHOST', 'localhost'),
-            'port': os.environ.get('PGPORT', '5432'),
-        }
+    # Usar variables específicas de Railway
+    db_params = {
+        'dbname': os.environ.get('POSTGRES_DB', 'postgres'),
+        'user': os.environ.get('POSTGRES_USER', 'postgres'),
+        'password': os.environ.get('POSTGRES_PASSWORD'),
+        'host': os.environ.get('PGHOST'),
+        'port': os.environ.get('PGPORT', '5432'),
+    }
 
     print("\nDatabase connection parameters:")
     for key, value in db_params.items():
