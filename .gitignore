@@ -4,6 +4,10 @@ __pycache__/
 *$py.class
 *.so
 .Python
+<<<<<<< HEAD
+=======
+env/
+>>>>>>> f34525e8e8919c5b916288e458c94f5acc19febc
 build/
 develop-eggs/
 dist/
@@ -19,6 +23,35 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+<<<<<<< HEAD
+=======
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+.env
+.venv
+venv/
+ENV/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+>>>>>>> f34525e8e8919c5b916288e458c94f5acc19febc
 
 # Django
 *.log
@@ -28,6 +61,7 @@ db.sqlite3-journal
 media/
 staticfiles/
 
+<<<<<<< HEAD
 # Virtual Environment
 venv/
 env/
@@ -44,5 +78,8 @@ ENV/
 .env.local
 
 # OS
+=======
+# System
+>>>>>>> f34525e8e8919c5b916288e458c94f5acc19febc
 .DS_Store
 Thumbs.db 
