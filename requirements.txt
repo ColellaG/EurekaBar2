@@ -1,6 +1,5 @@
 Django==5.0.2
 djangorestframework==3.14.0
-<<<<<<< HEAD
 django-cors-headers==4.3.1
 djangorestframework-simplejwt==5.3.1
 psycopg2-binary==2.9.9
@@ -11,11 +10,4 @@ python-dotenv==1.0.0
 asgiref==3.7.2
 sqlparse==0.4.4
 typing-extensions==4.9.0
-PyJWT==2.8.0 
-=======
-djangorestframework-simplejwt==5.3.1
-django-cors-headers==4.3.1
-psycopg2-binary==2.9.9
-gunicorn==21.2.0
-whitenoise==6.6.0 
->>>>>>> f34525e8e8919c5b916288e458c94f5acc19febc
+PyJWT==2.8.0

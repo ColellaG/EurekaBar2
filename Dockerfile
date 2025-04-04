@@ -17,6 +17,9 @@ RUN apt-get update && \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Actualizar pip e instalar wheel
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
 # Copiar requirements.txt primero
 COPY requirements.txt .
 
